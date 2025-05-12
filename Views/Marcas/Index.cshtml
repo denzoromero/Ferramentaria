@@ -1,0 +1,210 @@
+﻿
+
+@{
+    ViewData["Title"] = "Marca";
+}
+
+
+<h1>Marca</h1>
+
+
+<form class="row needs-validation" id="createMarcaForm" novalidate>
+    @Html.AntiForgeryToken()
+    <div class="modal fade" id="CreateMarca" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastro Novo Marca</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <div class="row mb-2">
+                            <label class="col-2 col-form-label">Nome</label>
+                            <div class="col-9">
+
+                                <div class="d-flex align-items-center">
+                                    <input class="form-control me-1 nome-input-marca" id="inputNomeMarca" name="Nome" required>
+                                    <div class="spinner-border text-primary spinner-nome-marca" aria-hidden="true" style="display:none;"></div>
+                                </div>
+                                <div class="invalid-feedback empty-nome-validate">
+                                    Por favor insira um Codigo.
+                                </div>
+                                <div class="invalid-feedback duplicate-nome-validate">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary loadingButton" id="submitCreateMarca">
+                        <div id="mainSubmitName">
+                            Salvar
+                        </div>
+                        <div id="submitLoader" style="display:none;">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Loading...</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<form class="row needs-validation" id="editMarcaForm" novalidate>
+    @Html.AntiForgeryToken()
+<div class="modal fade" id="EditMarca" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Marca</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="row mb-2">
+                        <label class="col-2 col-form-label">Nome</label>
+                        <div class="col-9">
+
+                            <div class="d-flex align-items-center">
+                                <input type="hidden" id="idMarca" name="Id">
+                                <input class="form-control me-1 nome-input-marca" id="inputNomeEditMarca" name="Nome" required>
+                                <div class="spinner-border text-primary spinner-nome-marca" aria-hidden="true" style="display:none;"></div>
+                            </div>
+                            <div class="invalid-feedback empty-nome-validate">
+                                Por favor insira um Codigo.
+                            </div>
+                            <div class="invalid-feedback duplicate-nome-validate">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary loadingButton" id="submitEditMarca">
+                    <div id="mainSubmitEditName">
+                        Salvar
+                    </div>
+                    <div id="submitEditLoader" style="display:none;">
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        <span role="status">Loading...</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+<form class="row needs-validation" id="inactivateMarcaForm" novalidate>
+    @Html.AntiForgeryToken()
+<div class="modal fade" id="inactivateMarcaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger loadingButton">Inativar</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+
+
+<div class="row mb-2">
+    <div class="col-6">
+        <button type="button" class="btn btn-primary d-flex align-content-center" data-bs-toggle="modal" data-bs-target="#CreateMarca">
+            <img class="SwitchingIcons" src="~/img/plus-lg.svg" alt="Plus Icon"> Novo
+        </button>
+    </div>
+</div>
+
+@* <button type="button" class="btn btn-primary loadingButton">
+    <img src="~/img/plus-lg.svg" alt="Plus Icon"> ADD
+</button> *@
+
+
+    <div class="row">
+        <div class="col-4">
+            <div class="input-group mb-3">
+                <input class="form-control rounded" name="filter" placeholder="Pesquisar" id="inputSearchMarca">
+                <button type="submit" class="btn btn-primary loadingButton" id="searchMarcaBtn">Search</button>
+            </div>
+        </div>
+    </div>
+
+<label class="form-check-label" for="inlineRadio1">Status do Registro &nbsp;</label>
+<div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="status" id="Ativo" value="1">
+    <label class="form-check-label" for="Ativo">Ativo</label>
+</div>
+
+<div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="status" id="Inativo" value="0">
+    <label class="form-check-label" for="Inativo">Inativo</label>
+</div>
+
+    <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="status" id="Todos" checked>
+    <label class="form-check-label" for="Todos">Todos</label>
+    </div>
+
+<div class="row mb-2">
+    <div class="col-sm-9">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="pagination" id="pagination10" value="10" checked>
+            <label class="form-check-label" for="pagination10">10</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="pagination" id="pagination30" value="30">
+            <label class="form-check-label" for="pagination30">30</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="pagination" id="pagination50" value="50">
+            <label class="form-check-label" for="pagination50">50</label>
+        </div>
+    </div>
+</div>
+
+<br />
+
+
+<table class="table align-middle mb-0" id="myTable">
+    <thead class="bg-light">
+        <tr>
+            <th>Id</th>
+            <th>Marca</th>
+            <th>Status</th>
+
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+   
+    </tbody>
+    </table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center" id="paginationControls">
+        <!-- Pagination items will be dynamically added here -->
+    </ul>
+</nav>
+
+
+<script src="~/views_js/marca/marca.js"></script>
+
+
+
+
+

@@ -1,0 +1,8 @@
+﻿body[data-theme="light"] {
+    background-color: #f5f5f5; /*Off White*/
+    color: #353839; /*Off Black*/
+}
+
+    body[data-theme="light"] .ButtonOutline:hover .SwitchingIcons {
+        filter: invert(1);
+    }

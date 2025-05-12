@@ -1,0 +1,94 @@
+﻿
+
+
+@await Component.InvokeAsync("ValuePartial")
+
+<div class="modal fade" id="qrCodeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">QR Code</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="video-container">
+                    <div style="height: 200px; width: 200px;">
+                        <video id="webcam-preview" autoplay style="height: 200px; width: 200px;"></video>
+                    </div>
+                    <div class="row col-4">
+                        <input type="text" class="form-control" placeholder="Chave" id="chaveInput">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row mt-2 mb-4">
+        <div class="col-4">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#qrCodeModal">
+                QR Code
+            </button>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.ReservationList != null)
+{
+    <div class="container-fluid">
+        <div class="row mb-3">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center align-middle">Status</th>
+                        <th class="text-center align-middle">Control Number</th>
+                        <th class="text-center align-middle">Registered</th>
+                        <th class="text-center align-middle">Preparing</th>
+                        <th class="text-center align-middle">Prepared</th>
+                        <th class="text-center align-middle"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ReservationsModel? value in ViewBag.ReservationList as IEnumerable<ReservationsModel>)
+                    {
+                        <tr>
+                            <td class="text-center align-middle">
+                                @value.ActualStatus
+                                @*      @if (value.ActualStatus == "Pending")
+                        {
+                        <img src="~/img/x-circle-fill.svg" />
+                        }
+                        else if (value.ActualStatus == "Prepared")
+                        {
+                        <img src="~/img/check-circle-fill.svg" />
+                        }
+                        else
+                        {
+
+                        }    *@
+                            </td>
+                            <td class="text-center align-middle">@value.ControlId</td>
+                            <td class="text-center align-middle">@value.itemCount</td>
+                            <td class="text-center align-middle">@value.PreparingCount</td>
+                            <td class="text-center align-middle">@value.PreparedCount</td>
+                            <td class="text-center align-middle">
+                                <a asp-action="PrepareItems" asp-route-id="@value.ControlId">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+
+@* <script type="text/javascript">
+    var testJsValue = '@ViewBag.TestJs';
+</script> *@
+<script src="~/lib/index.min.js"></script>
+<script src="~/views_js/reservations/indexreservation.js"></script>
+

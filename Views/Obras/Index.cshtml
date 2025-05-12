@@ -1,0 +1,800 @@
+﻿
+
+@{
+    ViewData["Title"] = "Index";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Obra</h1>
+
+
+
+
+<form class="row needs-validation" id="createObraForm" novalidate>
+    @Html.AntiForgeryToken()
+    <div class="modal fade" id="CreateObra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastro Novo Obra</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <div class="row mb-2">
+                            <label class="col-2 col-form-label">Codigo</label>
+                            <div class="col-9">
+
+                                <div class="d-flex align-items-center">
+                                    <input class="form-control me-1" id="codigo" name="Codigo" required maxlength="10">
+                                    <div class="spinner-border text-primary" id="spinnerCodigo" aria-hidden="true" style="display:none;"></div>
+                                </div>
+
+                                <div id="validateCodigo" class="invalid-feedback">
+                                    Por favor insira um Codigo.
+                                </div>
+                                <div id="validateDuplicateCodigo" class="invalid-feedback">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row mb-2">
+                            <label class="col-2 col-form-label">Nome</label>
+                            <div class="col-9">
+
+                                <div class="d-flex align-items-center">
+                                    <input class="form-control" id="nome" name="Nome" required>
+                                    <div class="spinner-border text-primary" id="spinnerNome" aria-hidden="true" style="display:none;"></div>
+                                </div>
+                                <div id="validateNome" class="invalid-feedback">
+                                    Por favor insira um Nome.
+                                </div>
+                                <div id="validateDuplicateNome" class="invalid-feedback">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary loadingButton" id="submitCreateObra">
+                        <div id="mainSubmitName">
+                            Salvar
+                        </div>
+                        <div id="submitLoader" style="display:none;">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Loading...</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<form class="row needs-validation" id="editObraForm" novalidate>
+    @Html.AntiForgeryToken()
+<div class="modal fade" id="EditObra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Obra</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="row mb-2">
+                        <label class="col-2 col-form-label">Codigo</label>
+                        <div class="col-9">
+                            <div class="d-flex align-items-center">
+                                <input type="hidden" id="idObra" name="Id">
+                                <input class="form-control me-1 codigo-input" name="Codigo" required maxlength="10">
+                                <div class="spinner-border text-primary spinner-codigo" aria-hidden="true" style="display:none;"></div>
+                            </div>
+                            <div class="invalid-feedback validate-codigo">
+                                Por favor insira um Codigo.
+                            </div>
+                            <div class="invalid-feedback validate-duplicate-codigo"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row mb-2">
+                        <label class="col-2 col-form-label">Nome</label>
+                        <div class="col-9">
+                            <div class="d-flex align-items-center">
+                                <input class="form-control nome-input" name="Nome" required>
+                                <div class="spinner-border text-primary spinner-nome" aria-hidden="true" style="display:none;"></div>
+                            </div>
+                            <div class="invalid-feedback validate-nome">
+                                Por favor insira um Nome.
+                            </div>
+                            <div class="invalid-feedback validate-duplicate-nome"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary loadingButton" id="submitEditObra">
+                    <div id="mainSubmitEditName">Salvar</div>
+                    <div id="submitEditLoader" style="display:none;">
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        <span role="status">Loading...</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+<div class="row mb-2">
+    <div class="col-6">
+        <button type="button" class="btn btn-primary d-flex align-content-center" data-bs-toggle="modal" data-bs-target="#CreateObra">
+            <img class="SwitchingIcons" src="~/img/plus-lg.svg" alt="Plus Icon"> Novo
+        </button>
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-4">
+            <div class="input-group mb-3">
+                <input class="form-control rounded" name="filter" placeholder="Pesquisar" id="inputSearchObra">
+                <button type="submit" class="btn btn-primary loadingButton" id="searchObraBtn">Search</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <label class="form-check-label" for="inlineRadio1">Status do Registro &nbsp;</label>
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="status" id="Ativo" value="1">
+        <label class="form-check-label" for="Ativo">Ativo</label>
+    </div>
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="status" id="Inativo" value="0">
+        <label class="form-check-label" for="Inativo">Inativo</label>
+    </div>
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="status" id="Todos" checked>
+        <label class="form-check-label" for="Todos">Todos</label>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-sm-9">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="pagination" id="pagination10" value="10" checked>
+                <label class="form-check-label" for="pagination10">10</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="pagination" id="pagination30" value="30">
+                <label class="form-check-label" for="pagination30">30</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="pagination" id="pagination50" value="50">
+                <label class="form-check-label" for="pagination50">50</label>
+            </div>
+        </div>
+    </div>
+
+<br />
+
+<table class="table align-middle mb-3 table-hover" id="myTable">
+    <thead class="bg-light">
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Codigo
+            </th>
+            <th>
+                Nome
+            </th>
+            <th>
+                Ativo
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+  
+    </tbody>
+</table>
+
+
+@* <div id="paginationControls"></div> *@
+
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center" id="paginationControls">
+        <!-- Pagination items will be dynamically added here -->
+    </ul>
+</nav>
+
+
+
+
+
+@if (ViewBag.OpenForError != null)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modal = document.getElementById('CreateObra');
+            var modalInstance = new bootstrap.Modal(modal);
+            modalInstance.show();
+        });
+    </script>
+}
+
+
+
+<script>
+
+    let currentPage = 0;
+
+    const pageSize = 10;
+
+
+    document.getElementById('inputSearchObra').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            turnOnLoader();
+            currentPage = 0;
+            handleSearch();
+        }
+    });
+
+    // Event listener for clicking the search button
+    document.getElementById('searchObraBtn').addEventListener('click', function () {
+        currentPage = 0;
+        handleSearch();
+    });
+
+    function handleSearch() {
+
+        const filter = document.getElementById("inputSearchObra").value;
+        const status = document.querySelector('input[name="status"]:checked').value;
+        const pagination = document.querySelector('input[name="pagination"]:checked').value;
+
+        // console.log(filter);
+        // console.log(status);
+        // console.log(pagination);
+
+
+        $.ajax({
+            url: '/Obras/GetObraList',
+            type: 'POST',
+            data: { filter: filter, status: status, pagination: pagination, page: currentPage },
+            // contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (data) {
+
+
+                if (data.success) {
+                    console.log(data.result);
+                    renderTable(data.result);
+                    updatePaginationControls(data.totalItems);
+                    turnOffLoader();
+                } else {
+                    console.error('No results found:', data.message);
+                    turnOffLoader();
+                }
+
+
+                // console.log('Data fetched successfully:', data);
+            },
+            error: function (error) {
+                console.error('Error fetching items:', error);
+                appendAlertWithoutAnimation(error, 'danger');
+                turnOffLoader();
+            }
+        });
+
+      
+    }
+
+    function renderTable(data) {
+        const tbody = document.querySelector('#myTable tbody');
+        tbody.innerHTML = '';
+
+        data.forEach(item => {
+
+            const row = document.createElement('tr');
+
+            const firstCell = document.createElement('td');
+            firstCell.textContent = item.id;
+
+            const secondCell = document.createElement('td');
+            secondCell.textContent = item.codigo;
+
+            const thirdCell = document.createElement('td');
+            thirdCell.textContent = item.nome;
+
+            const fourthCell = document.createElement('td');
+
+            const fifthCell = document.createElement('td');
+
+            const editLink = document.createElement("a");
+            editLink.href = "#";
+            editLink.classList.add('btn');
+            editLink.classList.add('btn-warning');
+            editLink.innerText = "Editar";
+            editLink.onclick = function () {
+                openEdit(item); // Assuming message.id is the identifier
+            };
+            fifthCell.appendChild(editLink);
+
+
+            if (item.ativo === 1) {
+                fourthCell.textContent = 'Ativo';
+
+                const deleteLink = document.createElement("a");
+                deleteLink.href = "#";
+                deleteLink.classList.add('btn');
+                deleteLink.classList.add('btn-danger');
+                deleteLink.classList.add('ms-2');
+                deleteLink.innerText = "Inativar";
+                fifthCell.appendChild(deleteLink);
+            } else {
+                fourthCell.textContent = 'Inativo';
+                row.classList.add('table-danger');
+            }
+
+            row.appendChild(firstCell);
+            row.appendChild(secondCell);
+            row.appendChild(thirdCell);
+            row.appendChild(fourthCell);
+            row.appendChild(fifthCell);
+            tbody.appendChild(row);
+
+            // const row = `<tr>
+            //     <td>${item.id}</td>
+            //     <td>${item.codigo}</td>
+            //     <td>${item.nome}</td>
+            //     <td>${item.ativo}</td>
+            //     <td></td>
+            // </tr>`;
+            // tbody.innerHTML += row;
+        });
+
+
+    }
+
+    function openEdit(item) {
+        var modal = document.getElementById('EditObra');
+        var modalInstance = new bootstrap.Modal(modal);
+        modal.setAttribute('data-bs-instance', modalInstance); // Store the instance in a data attribute
+        modalInstance.show();
+
+
+
+        // Set the values for the input fields
+        modal.querySelector('#idObra').value = item.id;
+        modal.querySelector('.codigo-input').value = item.codigo;
+        modal.querySelector('.codigo-input').classList.remove('is-invalid');
+        modal.querySelector('.codigo-input').classList.remove('is-valid');
+
+        modal.querySelector('.spinner-codigo').style.display = 'none';
+        modal.querySelector('.validate-duplicate-codigo').style.display = 'none';
+        modal.querySelector('.validate-codigo').style.display = 'none';
+
+        modal.querySelector('.nome-input').value = item.nome; // Assuming item has a nome property
+        modal.querySelector('.nome-input').classList.remove('is-invalid');
+        modal.querySelector('.nome-input').classList.remove('is-valid');
+
+        modal.querySelector('.spinner-nome').style.display = 'none';
+        modal.querySelector('.validate-nome').style.display = 'none';
+        modal.querySelector('.validate-duplicate-nome').style.display = 'none';
+
+
+    }
+
+
+    function updatePaginationControls(totalItems) {
+        const totalPages = Math.ceil(totalItems / pageSize);
+        const paginationControls = document.getElementById('paginationControls');
+        paginationControls.innerHTML = '';
+
+        const themeClass = document.querySelector("body").dataset.theme === 'dark' ? 'bg-dark text-light' : 'bg-light text-dark';
+
+        // Previous button
+        const prevButton = document.createElement('li');
+        prevButton.className = 'page-item' + (currentPage === 0 ? ' disabled' : '');
+        // prevButton.innerHTML = `<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>`;
+        prevButton.innerHTML = `<a class="page-link ${themeClass}" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>`;
+        prevButton.onclick = function (event) {
+            event.preventDefault(); // Prevent default action
+            if (currentPage > 0) {
+                currentPage--;
+                handleSearch();
+            }
+        };
+        paginationControls.appendChild(prevButton);
+
+        // Page number buttons
+        for (let i = 0; i < totalPages; i++) {
+            const pageItem = document.createElement('li');
+            const pageLinkClass = `page-link ${i === currentPage ? '' : themeClass}`;
+            pageItem.className = 'page-item' + (i === currentPage ? ' active' : '');
+            // pageItem.innerHTML = `<a class="page-link" href="#">${i + 1}</a>`;
+            pageItem.innerHTML = `<a class="${pageLinkClass}" href="#">${i + 1}</a>`;
+            pageItem.onclick = function (event) {
+                event.preventDefault(); // Prevent default action
+                currentPage = i;
+                handleSearch();
+            };
+            paginationControls.appendChild(pageItem);
+        }
+
+        // Next button
+        const nextButton = document.createElement('li');
+        nextButton.className = 'page-item' + (currentPage === totalPages - 1 ? ' disabled' : '');
+        // nextButton.innerHTML = `<a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>`;
+        nextButton.innerHTML = `<a class="page-link ${themeClass}" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>`;
+        nextButton.onclick = function (event) {
+            event.preventDefault(); // Prevent default action
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                handleSearch();
+            }
+        };
+        paginationControls.appendChild(nextButton);
+    }
+
+    document.getElementById("codigo").addEventListener("blur", function (event) {
+
+        var codigoInput = document.getElementById("codigo");
+        var codigoSpinner = document.getElementById("spinnerCodigo");
+        var codigoValidateDiv = document.getElementById("validateDuplicateCodigo");
+
+        console.log(codigoInput.value);
+
+        if (codigoInput.value.trim() !== "") {
+
+            codigoInput.disabled = true;
+
+            codigoSpinner.style.display = 'block';
+
+            codigoValidateDiv.style.display = 'block';
+            codigoValidateDiv.innerHTML = `Aguarde um momento. Validando se o Codigo: <b> ${codigoInput.value} </b> inserido é duplicado.`
+
+            codigoInput.classList.remove('is-invalid');
+
+            document.getElementById('validateCodigo').style.display = 'none';
+
+            $.ajax({
+                url: '/Obras/checkCodigoDuplicate',
+                type: 'GET',
+                data: { codigo: codigoInput.value.trim() },
+                success: function (data) {
+
+                    if (data.success) {
+               
+                        codigoInput.classList.add('is-valid');
+                        codigoValidateDiv.style.display = 'none';
+                    } else {
+
+                        codigoValidateDiv.innerHTML = data.message;
+                        codigoInput.classList.add('is-invalid');
+                    }
+
+                    codigoSpinner.style.display = 'none';
+                    codigoInput.disabled = false;
+                },
+                error: function (error) {
+                    console.error('Error fetching items:', error);
+                    appendAlertWithoutAnimation(error, 'danger');
+                    codigoInput.disabled = false;
+                }
+
+            });
+
+        }else{
+            codigoInput.classList.add('is-invalid');
+            document.getElementById('validateCodigo').style.display = 'block';
+        }
+
+    });
+
+    document.getElementById("nome").addEventListener("blur", function (event) {
+
+        var nomeInput = document.getElementById("nome");
+        var nomeSpinner = document.getElementById("spinnerNome");
+        var nomeValidate = document.getElementById("validateNome");
+        var nomeValidateDiv = document.getElementById("validateDuplicateNome");
+
+        console.log(nomeInput.value);
+
+        if (nomeInput.value.trim() !== "") {
+
+            nomeInput.disabled = true;
+
+            nomeSpinner.style.display = 'block';
+
+            nomeValidateDiv.style.display = 'block';
+            nomeValidateDiv.innerHTML = `Aguarde um momento. Validando se o Nome: <b> ${nomeInput.value} </b> inserido é duplicado.`
+
+            nomeInput.classList.remove('is-invalid');
+            nomeValidate.style.display = 'none';
+
+            $.ajax({
+                url: '/Obras/checkNomeDuplicate',
+                type: 'GET',
+                data: { nome: nomeInput.value.trim() },
+                success: function (data) {
+
+                    if (data.success) {
+
+                        nomeInput.classList.add('is-valid');
+                        nomeValidateDiv.style.display = 'none';
+                    } else {
+
+                        nomeValidateDiv.innerHTML = data.message;
+                        nomeInput.classList.add('is-invalid');
+                    }
+
+                    nomeSpinner.style.display = 'none';
+                    nomeInput.disabled = false;
+                },
+                error: function (error) {
+                    console.error('Error fetching items:', error);
+                    appendAlertWithoutAnimation(error, 'danger');
+                    nomeInput.disabled = false;
+                }
+
+            });
+
+
+        } else {
+            nomeInput.classList.add('is-invalid');
+            nomeValidate.style.display = 'block';
+        }
+
+    });
+
+
+    document.getElementById('createObraForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var form = event.target;
+        var isValid = true;
+
+        var submitBtn = document.getElementById("submitCreateObra");
+        var mainName = document.getElementById("mainSubmitName");
+        var loaderName = document.getElementById("submitLoader");
+
+        // Validate Codigo
+        var codigo = document.getElementById('codigo');
+        if (!codigo.value) {
+            isValid = false;
+            codigo.classList.add('is-invalid');
+            document.getElementById('validateCodigo').style.display = 'block';
+            document.getElementById('validateDuplicateCodigo').style.display = 'none';
+            turnOffLoader();
+        } else if (codigo.classList.contains('is-invalid')) {
+            console.log('trigger');
+            isValid = false;
+            document.getElementById('validateCodigo').style.display = 'none';
+            document.getElementById('validateDuplicateCodigo').style.display = 'block';
+            turnOffLoader();
+        } else{
+            codigo.classList.remove('is-invalid');
+            document.getElementById('validateCodigo').style.display = 'none';
+            document.getElementById('validateDuplicateCodigo').style.display = 'none';
+        }
+
+
+        // if (codigo.classList.contains('is-invalid')) {
+        //     // The input has the 'is-valid' class
+        //     console.log('The input is valid.');
+        // } 
+
+
+        // Validate Nome
+        var nome = document.getElementById('nome');
+        if (!nome.value) {
+            isValid = false;
+            nome.classList.add('is-invalid');
+            document.getElementById('validateNome').style.display = 'block';
+            document.getElementById('validateDuplicateNome').style.display = 'none';
+            turnOffLoader();
+        } else if (nome.classList.contains('is-invalid')) {
+            isValid = false;
+            document.getElementById('validateNome').style.display = 'none';
+            document.getElementById('validateDuplicateNome').style.display = 'block';
+            turnOffLoader();
+        } else {
+            nome.classList.remove('is-invalid');
+            document.getElementById('validateNome').style.display = 'none';
+            document.getElementById('validateDuplicateNome').style.display = 'none';
+        }
+
+        if (isValid) {
+            loaderName.style.display = 'block';
+            mainName.style.display = 'none';
+
+
+            form.action = 'Create'; // Replace with your actual action URL
+            form.method = 'POST';
+
+            form.submit();
+        } else {
+            loaderName.style.display = 'none';
+            mainName.style.display = 'block';
+        }
+    });
+
+
+    document.querySelectorAll('.codigo-input').forEach(function (element) {
+        element.addEventListener('blur', function (event) {
+
+            const idObra = document.getElementById("idObra").value;
+            var codigoInput = event.target;
+            var codigoSpinner = codigoInput.closest('.d-flex').querySelector('.spinner-codigo');
+            var codigoValidateDiv = codigoInput.closest('.col-9').querySelector('.validate-duplicate-codigo');
+            var codigoValidate = codigoInput.closest('.col-9').querySelector('.validate-codigo');
+
+            console.log(codigoInput.value);
+
+            if (codigoInput.value.trim() !== "") {
+                codigoInput.disabled = true;
+                codigoSpinner.style.display = 'block';
+                codigoValidateDiv.style.display = 'block';
+                codigoValidateDiv.innerHTML = `Aguarde um momento. Validando se o Codigo: <b> ${codigoInput.value} </b> inserido é duplicado.`;
+
+                codigoInput.classList.remove('is-invalid');
+                codigoValidate.style.display = 'none';
+
+                $.ajax({
+                    url: '/Obras/checkCodigoDuplicateEdit',
+                    type: 'GET',
+                    data: { codigo: codigoInput.value.trim(), id: idObra },
+                    success: function (data) {
+                        if (data.success) {
+                            codigoInput.classList.add('is-valid');
+                            codigoValidateDiv.style.display = 'none';
+                        } else {
+                            codigoValidateDiv.innerHTML = data.message;
+                            codigoInput.classList.add('is-invalid');
+                        }
+                        codigoSpinner.style.display = 'none';
+                        codigoInput.disabled = false;
+                    },
+                    error: function (error) {
+                        console.error('Error fetching items:', error);
+                        appendAlertWithoutAnimation(error, 'danger');
+                        codigoInput.disabled = false;
+                    }
+                });
+            } else {
+                codigoInput.classList.add('is-invalid');
+                codigoValidate.style.display = 'block';
+            }
+        });
+    });
+
+    document.querySelectorAll('.nome-input').forEach(function (element) {
+        element.addEventListener('blur', function (event) {
+
+                 const idObra = document.getElementById("idObra").value;
+
+            var nomeInput = event.target;
+            var nomeSpinner = nomeInput.closest('.d-flex').querySelector('.spinner-nome');
+            var nomeValidate = nomeInput.closest('.col-9').querySelector('.validate-nome');
+            var nomeValidateDiv = nomeInput.closest('.col-9').querySelector('.validate-duplicate-nome');
+
+            console.log(nomeInput.value);
+
+            if (nomeInput.value.trim() !== "") {
+                nomeInput.disabled = true;
+                nomeSpinner.style.display = 'block';
+                nomeValidateDiv.style.display = 'block';
+                nomeValidateDiv.innerHTML = `Aguarde um momento. Validando se o Nome: <b> ${nomeInput.value} </b> inserido é duplicado.`;
+
+                nomeInput.classList.remove('is-invalid');
+                nomeValidate.style.display = 'none';
+
+                $.ajax({
+                    url: '/Obras/checkNomeDuplicateEdit',
+                    type: 'GET',
+                    data: { nome: nomeInput.value.trim(), id: idObra },
+                    success: function (data) {
+                        if (data.success) {
+                            nomeInput.classList.add('is-valid');
+                            nomeValidateDiv.style.display = 'none';
+                        } else {
+                            nomeValidateDiv.innerHTML = data.message;
+                            nomeInput.classList.add('is-invalid');
+                        }
+                        nomeSpinner.style.display = 'none';
+                        nomeInput.disabled = false;
+                    },
+                    error: function (error) {
+                        console.error('Error fetching items:', error);
+                        appendAlertWithoutAnimation(error, 'danger');
+                        nomeInput.disabled = false;
+                    }
+                });
+            } else {
+                nomeInput.classList.add('is-invalid');
+                nomeValidate.style.display = 'block';
+            }
+        });
+    });
+
+    document.getElementById('editObraForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var form = event.target;
+        var isValid = true;
+
+        var submitBtn = document.getElementById("submitEditObra");
+        var mainName = document.getElementById("mainSubmitEditName");
+        var loaderName = document.getElementById("submitEditLoader");
+
+        var modal = document.getElementById('EditObra');
+
+        console.log('trigger this event');
+
+        var codigo = modal.querySelector('.codigo-input');
+        console.log(codigo.value);
+        if (!codigo.value) {
+            isValid = false;
+            codigo.classList.add('is-invalid');
+            modal.querySelector('.validate-codigo').style.display = 'block';
+            modal.querySelector('.validate-duplicate-codigo').style.display = 'none';
+            turnOffLoader();
+        } else if (codigo.classList.contains('is-invalid')) {
+            console.log('trigger');
+            isValid = false;
+            modal.querySelector('.validate-codigo').style.display = 'none';
+            modal.querySelector('.validate-duplicate-codigo').style.display = 'block';
+            turnOffLoader();
+        } else {
+            codigo.classList.remove('is-invalid');
+            modal.querySelector('.validate-codigo').style.display = 'none';
+            modal.querySelector('.validate-duplicate-codigo').style.display = 'none';
+        }
+
+        var nome = modal.querySelector('.nome-input');
+        if (!nome.value) {
+            isValid = false;
+            nome.classList.add('is-invalid');
+            modal.querySelector('.validate-nome').style.display = 'block';
+            modal.querySelector('.validate-duplicate-nome').style.display = 'none';
+            turnOffLoader();
+        } else if (nome.classList.contains('is-invalid')) {
+            isValid = false;
+            modal.querySelector('.validate-nome').style.display = 'none';
+            modal.querySelector('.validate-duplicate-nome').style.display = 'block';
+            turnOffLoader();
+        } else {
+            nome.classList.remove('is-invalid');
+            modal.querySelector('.validate-nome').style.display = 'none';
+            modal.querySelector('.validate-duplicate-nome').style.display = 'none';
+        }
+
+        if (isValid) {
+            console.log('trigger submission');
+            loaderName.style.display = 'block';
+            mainName.style.display = 'none';
+
+
+            form.action = 'EditObraChange'; // Replace with your actual action URL
+            form.method = 'POST';
+
+            form.submit();
+        } else {
+            loaderName.style.display = 'none';
+            mainName.style.display = 'block';
+        }
+
+    });
+
+</script>

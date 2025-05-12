@@ -1,0 +1,9 @@
+﻿body[data-theme="dark"] {
+    background-color: #353839; /*Off Dark hex*/
+    color: #f9f9f9; /*Off White hex*/
+}
+
+
+    body[data-theme="dark"] .SwitchingIcons {
+        filter: invert(1); /* This inverts the color, making dark images light */
+    }
